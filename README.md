@@ -1,13 +1,13 @@
-# ServiceNow Package
-Package to integrate with ServiceNow API
+# Slack Package
+Package to integrate with Slack API. This package uses the Slack Java SDK.
 
 ## Features
- * Table API
- * Attachment API
- * Trigger bot on new incident or update to incident
+ * Send Messages
+ * Create Channels, Get Channel Details
+ * Trigger bot from an app mention message
     
 ### How do I use this package?
-1. Create an app to authorize in OAuth settings in ServiceNow
-2. Enter auth details in start session action
-3. Drag and Drop individual actions to perform CRUD operations on Tables, Attachments
+1. Create an app with appropriate OAuth scopes in Slack
+2. Enter bot token in Start Session action
+3. Drag and Drop individual actions
 
