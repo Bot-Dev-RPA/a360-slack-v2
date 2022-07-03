@@ -51,10 +51,7 @@ public class ConversationList {
 			@Idx(index = "1", type = TEXT) @Pkg(label = "Session name", default_value_type = STRING,  default_value = "Default") @NotEmpty String sessionName
 	) {
 		SlackServer slackObject = (SlackServer) this.sessionMap.get(sessionName);
-		String token = slackObject.getToken();
-		Slack instance = slackObject.getInstance();
-		TableValue table = SlackMethods.listChannels(instance, token);
-		return table;
+		return SlackMethods.listChannels(slackObject.slack, slackObject.token);
 	}
 
 	public void setSessionMap(Map<String, Object> sessionMap) {

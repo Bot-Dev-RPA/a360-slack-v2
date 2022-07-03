@@ -49,10 +49,7 @@ public class CreateChannel {
 			@Idx(index = "2", type = AttributeType.TEXT) @Pkg(label = "Channel Name", description = "e.g. #random") @NotEmpty String channel
 	) {
 		SlackServer slackObject = (SlackServer) this.sessionMap.get(sessionName);
-		String token = slackObject.getToken();
-		Slack instance = slackObject.getInstance();
-		String message = SlackMethods.createChannel(instance, token, channel);
-		return new StringValue(message);
+		return new StringValue(SlackMethods.createChannel(slackObject.slack, slackObject.token, channel));
 	}
 
 	public void setSessionMap(Map<String, Object> sessionMap) {

@@ -56,9 +56,7 @@ public class ConversationHistory {
 			@Idx(index = "2", type = AttributeType.TEXT) @Pkg(label = "Channel Name", description = "e.g. #random") @NotEmpty String channel
 	) {
 		SlackServer slackObject = (SlackServer) this.sessionMap.get(sessionName);
-		String token = slackObject.getToken();
-		Slack instance = slackObject.getInstance();
-		List<Message> messages = SlackMethods.conversationHistory(instance, token, channel);
+		List<Message> messages = SlackMethods.conversationHistory(slackObject.slack, slackObject.token, channel);
 		return SlackMethods.messagesToTable(messages);
 	}
 
