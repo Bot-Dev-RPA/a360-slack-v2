@@ -39,7 +39,7 @@ import static com.automationanywhere.commandsdk.model.DataType.RECORD;
 
 @BotCommand(commandType = BotCommand.CommandType.Trigger)
 @CommandPkg(label = "App Mention Trigger", description = "Real Time Mention Trigger", icon = "SLACK.svg", name = "appMentionTrigger",
-        return_type = RECORD, return_name = "TriggerData", return_description = "Available keys: triggerType")
+        return_type = RECORD, return_name = "TriggerData", return_description = "Available keys: triggerType, action")
 public class messageTrigger {
 
     private static final Map<String, SocketModeApp> taskMap = new ConcurrentHashMap<>();
