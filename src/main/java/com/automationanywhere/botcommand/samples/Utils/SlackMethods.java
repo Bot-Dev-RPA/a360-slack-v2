@@ -16,8 +16,10 @@ import com.slack.api.methods.response.conversations.ConversationsCreateResponse;
 import com.slack.api.methods.response.conversations.ConversationsHistoryResponse;
 import com.slack.api.methods.response.conversations.ConversationsInviteResponse;
 import com.slack.api.methods.response.conversations.ConversationsListResponse;
+import com.slack.api.methods.response.files.FilesUploadResponse;
 import com.slack.api.model.Message;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -208,7 +210,7 @@ public class SlackMethods {
             if (response.isOk()) {
                 output = "Users have been invited.";
             } else {
-                System.out.println(response.getError());
+                throw new BotCommandException(response.getError());
             }
         } catch (SlackApiException requestFailure) {
             throw new BotCommandException(SlackAPIExceptionMessage + requestFailure);
@@ -217,4 +219,26 @@ public class SlackMethods {
         }
         return output;
     }
+
+    public String fileUpload (String fileName, String comment, String filePath, List<String> channelsList) {
+        String output = null;
+        try {
+            FilesUploadResponse response = instance.methods(token).filesUpload(req -> req
+                    .channels(channelsList)
+                    .initialComment(comment)
+                    .filename(fileName)
+                    .file(new File(filePath)));
+            if (response.isOk()) {
+                output = "File has been uploaded";
+            } else {
+                throw new BotCommandException(response.getError());
+            }
+        } catch (SlackApiException requestFailure) {
+            throw new BotCommandException(SlackAPIExceptionMessage + requestFailure);
+        } catch (IOException connectivityIssue) {
+            throw new BotCommandException(connectivityIssueMessage + connectivityIssue);
+        }
+        return output;
+    }
+
 }

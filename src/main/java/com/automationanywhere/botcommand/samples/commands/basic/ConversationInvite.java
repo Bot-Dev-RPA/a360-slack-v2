@@ -40,7 +40,7 @@ import static com.automationanywhere.commandsdk.model.DataType.TABLE;
 		node_label = "Invite users to channel {{channel}} in session {{sessionName}}",
 		group_label="Conversations",
 		comment = true,
-		return_label = "Assign result to a Table variable", return_type = TABLE
+		return_label = "Assign result to a string variable", return_type = STRING
 		)
 public class ConversationInvite {
 
