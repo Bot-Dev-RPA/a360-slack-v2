@@ -22,6 +22,7 @@ import com.automationanywhere.commandsdk.annotations.*;
 import com.automationanywhere.commandsdk.annotations.rules.NotEmpty;
 import com.automationanywhere.commandsdk.model.AttributeType;
 
+import com.automationanywhere.core.security.SecureString;
 import com.slack.api.bolt.socket_mode.SocketModeApp;
 import com.slack.api.bolt.App;
 import com.slack.api.bolt.AppConfig;
@@ -33,6 +34,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
+import static com.automationanywhere.commandsdk.model.AttributeType.CREDENTIAL;
 import static com.automationanywhere.commandsdk.model.DataType.RECORD;
 
 @BotCommand(commandType = BotCommand.CommandType.Trigger)
@@ -67,14 +69,14 @@ public class messageTrigger {
     }
 
     @StartListen
-    public void startTrigger(@Idx(index = "1", type = AttributeType.TEXT)
+    public void startTrigger(@Idx(index = "1", type = CREDENTIAL)
                              @Pkg(label = "App Token")
-                             @NotEmpty String appToken, @Idx(index = "2", type = AttributeType.TEXT)
+                             @NotEmpty SecureString appToken, @Idx(index = "2", type = CREDENTIAL)
                              @Pkg(label = "Bot Token")
-                             @NotEmpty String botToken) throws Exception {
-        AppConfig appConfig = AppConfig.builder().singleTeamBotToken(botToken).build();
+                             @NotEmpty SecureString botToken) throws Exception {
+        AppConfig appConfig = AppConfig.builder().singleTeamBotToken(botToken.getInsecureString()).build();
         App app = new App(appConfig);
-        SocketModeApp socketModeApp = new SocketModeApp(appToken, app);
+        SocketModeApp socketModeApp = new SocketModeApp(appToken.getInsecureString(), app);
         app.event(AppMentionEvent.class, (req, ctx) -> {
             String incomingMsg = req.getEvent().getText();
             String responseMsg = "";

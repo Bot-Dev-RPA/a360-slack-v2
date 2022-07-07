@@ -12,22 +12,17 @@
  */
 package com.automationanywhere.botcommand.samples.commands.basic;
 
-import static com.automationanywhere.commandsdk.model.AttributeType.CREDENTIAL;
-import static com.automationanywhere.commandsdk.model.AttributeType.TEXT;
-import static com.automationanywhere.commandsdk.model.DataType.STRING;
 import com.automationanywhere.botcommand.samples.Utils.SlackServer;
-import java.io.IOException;
-import java.util.Map;
-import com.automationanywhere.commandsdk.annotations.BotCommand;
-import com.automationanywhere.commandsdk.annotations.CommandPkg;
-import com.automationanywhere.commandsdk.annotations.Execute;
-import com.automationanywhere.commandsdk.annotations.Idx;
-import com.automationanywhere.commandsdk.annotations.Pkg;
-import com.automationanywhere.commandsdk.annotations.Sessions;
+import com.automationanywhere.commandsdk.annotations.*;
 import com.automationanywhere.commandsdk.annotations.rules.NotEmpty;
 import com.automationanywhere.core.security.SecureString;
 import com.slack.api.Slack;
-import org.json.simple.parser.ParseException;
+
+import java.util.Map;
+
+import static com.automationanywhere.commandsdk.model.AttributeType.CREDENTIAL;
+import static com.automationanywhere.commandsdk.model.AttributeType.TEXT;
+import static com.automationanywhere.commandsdk.model.DataType.STRING;
 
 /**
  * @author James Dickson
@@ -41,7 +36,7 @@ import org.json.simple.parser.ParseException;
 		group_label="Admin",
 		comment = true
 		)
-public class A_StartSession {
+public class A1_StartSession {
 
 	@Sessions
 	private Map<String, Object> sessionMap;

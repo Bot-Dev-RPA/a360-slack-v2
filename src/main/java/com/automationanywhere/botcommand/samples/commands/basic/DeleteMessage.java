@@ -18,12 +18,10 @@ import com.automationanywhere.botcommand.samples.Utils.SlackServer;
 import com.automationanywhere.commandsdk.annotations.*;
 import com.automationanywhere.commandsdk.annotations.rules.NotEmpty;
 import com.automationanywhere.commandsdk.model.AttributeType;
-import com.slack.api.Slack;
 
 import java.util.Map;
 
 import static com.automationanywhere.commandsdk.model.AttributeType.TEXT;
-import static com.automationanywhere.commandsdk.model.AttributeType.TEXTAREA;
 import static com.automationanywhere.commandsdk.model.DataType.STRING;
 
 /**

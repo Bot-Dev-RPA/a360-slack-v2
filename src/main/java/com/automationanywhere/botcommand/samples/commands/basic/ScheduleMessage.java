@@ -19,7 +19,6 @@ import com.automationanywhere.commandsdk.annotations.*;
 import com.automationanywhere.commandsdk.annotations.rules.NotEmpty;
 import com.automationanywhere.commandsdk.annotations.rules.NumberInteger;
 import com.automationanywhere.commandsdk.model.AttributeType;
-import com.slack.api.Slack;
 
 import java.util.Map;
 
