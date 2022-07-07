@@ -1,15 +1,7 @@
 package com.automationanywhere.botcommand.samples.commands.basic;
+
 import com.automationanywhere.commandsdk.annotations.*;
 import com.automationanywhere.commandsdk.annotations.rules.NotEmpty;
-import com.automationanywhere.commandsdk.annotations.rules.NotEmpty;
-import com.automationanywhere.commandsdk.i18n.Messages;
-import com.automationanywhere.commandsdk.i18n.MessagesFactory;
-import com.automationanywhere.commandsdk.annotations.BotCommand;
-import com.automationanywhere.commandsdk.annotations.CommandPkg;
-import com.automationanywhere.commandsdk.annotations.Execute;
-import com.automationanywhere.commandsdk.annotations.Idx;
-import com.automationanywhere.commandsdk.annotations.Pkg;
-import com.automationanywhere.commandsdk.annotations.Sessions;
 
 import java.util.Map;
 
@@ -23,7 +15,7 @@ import static com.automationanywhere.commandsdk.model.DataType.STRING;
 
 @BotCommand
 @CommandPkg(label = "End Session",
-        name = "EndSnowSession",
+        name = "endSlackSession",
         description = "Session End",
         icon = "SLACK.svg",
         node_label = "End Session {{sessionName}}",
@@ -31,7 +23,7 @@ import static com.automationanywhere.commandsdk.model.DataType.STRING;
         comment = true
         )
 
-public class Ab_EndSession {
+public class A2_EndSession {
 
     @Sessions
     private Map<String, Object> sessions;
