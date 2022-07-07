@@ -49,7 +49,10 @@ public class PostMessage {
 			@Idx(index = "3", type = TEXTAREA) @Pkg(label = "Text for message", description = "e.g. Welcome to the channel") @NotEmpty String text
 	) {
 		SlackServer slackObject = (SlackServer) this.sessionMap.get(sessionName);
-		return new StringValue(SlackMethods.postMessage(slackObject.slack, slackObject.token, channel, text));
+		SlackMethods slack = new SlackMethods()
+							.setInstance(slackObject.slack)
+							.setToken(slackObject.token);
+		return new StringValue(slack.postMessage(channel, text));
 	}
 
 	public void setSessionMap(Map<String, Object> sessionMap) {

@@ -57,7 +57,10 @@ public class ScheduleMessage {
 			@NotEmpty Double seconds
 	) {
 		SlackServer slackObject = (SlackServer) this.sessionMap.get(sessionName);
-		return new StringValue(SlackMethods.scheduleMessage(slackObject.slack, slackObject.token, channel, text, seconds.intValue()));
+		SlackMethods slack = new SlackMethods()
+				.setInstance(slackObject.slack)
+				.setToken(slackObject.token);
+		return new StringValue(slack.scheduleMessage(channel, text, seconds.intValue()));
 	}
 	public void setSessionMap(Map<String, Object> sessionMap) {
 		this.sessionMap = sessionMap;

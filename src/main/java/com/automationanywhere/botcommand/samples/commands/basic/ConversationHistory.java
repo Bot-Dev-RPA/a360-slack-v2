@@ -53,10 +53,13 @@ public class ConversationHistory {
 	@Execute
 	public TableValue execute(
 			@Idx(index = "1", type = TEXT) @Pkg(label = "Session name", default_value_type = STRING,  default_value = "Default") @NotEmpty String sessionName,
-			@Idx(index = "2", type = AttributeType.TEXT) @Pkg(label = "Channel Name", description = "e.g. #random") @NotEmpty String channel
+			@Idx(index = "2", type = AttributeType.TEXT) @Pkg(label = "Channel ID", description = "e.g. #C03N2KMB9K7") @NotEmpty String channel
 	) {
 		SlackServer slackObject = (SlackServer) this.sessionMap.get(sessionName);
-		List<Message> messages = SlackMethods.conversationHistory(slackObject.slack, slackObject.token, channel);
+		SlackMethods slack = new SlackMethods()
+				.setInstance(slackObject.slack)
+				.setToken(slackObject.token);
+		List<Message> messages = slack.conversationHistory(channel);
 		return SlackMethods.messagesToTable(messages);
 	}
 

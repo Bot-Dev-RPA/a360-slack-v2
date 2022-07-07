@@ -14,6 +14,7 @@ import com.slack.api.methods.response.chat.ChatPostMessageResponse;
 import com.slack.api.methods.response.chat.ChatScheduleMessageResponse;
 import com.slack.api.methods.response.conversations.ConversationsCreateResponse;
 import com.slack.api.methods.response.conversations.ConversationsHistoryResponse;
+import com.slack.api.methods.response.conversations.ConversationsInviteResponse;
 import com.slack.api.methods.response.conversations.ConversationsListResponse;
 import com.slack.api.model.Message;
 
@@ -25,7 +26,27 @@ import java.util.List;
 
 public class SlackMethods {
 
-    public static String postMessage(Slack instance, String token, String channelName, String message){
+    private static String SlackAPIExceptionMessage = "Slack API responded with unsuccessful status code. ";
+    private static String connectivityIssueMessage = "Connection issue. Please check your token. ";
+
+    private Slack instance;
+    private String token;
+
+    public SlackMethods () {
+
+    }
+
+    public SlackMethods setInstance(Slack instance) {
+        this.instance = instance;
+        return this;
+    }
+
+    public SlackMethods setToken(String tokenValue) {
+        this.token = tokenValue;
+        return this;
+    }
+
+    public String postMessage(String channelName, String message){
         String postedMessage = null;
         try {
             ChatPostMessageResponse response = instance.methods(token).chatPostMessage(req -> req
@@ -35,31 +56,31 @@ public class SlackMethods {
                 postedMessage = response.getMessage().toString();
             } else { throw new BotCommandException(response.getError()); }
         } catch (SlackApiException requestFailure) {
-            throw new BotCommandException("Slack API responded with unsuccessful status code. " + requestFailure);
+            throw new BotCommandException(SlackAPIExceptionMessage + requestFailure);
         } catch (IOException connectivityIssue) {
-            throw new BotCommandException("Connection issue. Please check your token. " + connectivityIssue);
+            throw new BotCommandException(connectivityIssueMessage + connectivityIssue);
         }
         return postedMessage;
     }
 
-    public static String deleteMessage(Slack instance, String token, String channelName, String timestamp){
+    public String deleteMessage(String channelId, String timestamp){
         String postedMessage = null;
         try {
             ChatDeleteResponse response = instance.methods(token).chatDelete(req -> req
-                    .channel(channelName)
+                    .channel(channelId)
                     .ts(timestamp));
             if (response.isOk()) {
                 postedMessage = "Message Deleted.";
             } else { throw new BotCommandException(response.getError()); }
         } catch (SlackApiException requestFailure) {
-            throw new BotCommandException("Slack API responded with unsuccessful status code. " + requestFailure);
+            throw new BotCommandException(SlackAPIExceptionMessage + requestFailure);
         } catch (IOException connectivityIssue) {
-            throw new BotCommandException("Connection issue. Please check your token. " + connectivityIssue);
+            throw new BotCommandException(connectivityIssueMessage + connectivityIssue);
         }
         return postedMessage;
     }
 
-    public static String createChannel(Slack instance, String token, String channelName){
+    public String createChannel(String channelName){
         String createdChannel = null;
         try {
             ConversationsCreateResponse channel = instance.methods(token).conversationsCreate(req -> req
@@ -68,14 +89,14 @@ public class SlackMethods {
                 createdChannel = channel.getChannel().getId();
             } else { throw new BotCommandException(channel.getError()); }
         } catch (SlackApiException requestFailure) {
-            throw new BotCommandException("Slack API responded with unsuccessful status code. " + requestFailure);
+            throw new BotCommandException(SlackAPIExceptionMessage + requestFailure);
         } catch (IOException connectivityIssue) {
-            throw new BotCommandException("Connection issue. Please check your token. " + connectivityIssue);
+            throw new BotCommandException(connectivityIssueMessage + connectivityIssue);
         }
         return createdChannel;
     }
 
-    public static String scheduleMessage(Slack instance, String token, String channelName, String text, Integer seconds){
+    public String scheduleMessage(String channelName, String text, Integer seconds){
         String scheduledMessage;
         Instant now = Instant.now();
         long epochValue = now.getEpochSecond() + seconds;
@@ -89,25 +110,25 @@ public class SlackMethods {
                 scheduledMessage = response.getMessage().getText();
             } else { throw new BotCommandException(response.getError()); }
         } catch (SlackApiException requestFailure) {
-            throw new BotCommandException("Slack API responded with unsuccessful status code. " + requestFailure);
+            throw new BotCommandException(SlackAPIExceptionMessage + requestFailure);
         } catch (IOException connectivityIssue) {
-            throw new BotCommandException("Connection issue. Please check your token. " + connectivityIssue);
+            throw new BotCommandException(connectivityIssueMessage + connectivityIssue);
         }
         return scheduledMessage;
     }
 
-    public static List<Message> conversationHistory(Slack instance, String token, String channelName){
+    public List<Message> conversationHistory(String channelId){
         List<Message> messageList = null;
         try {
             ConversationsHistoryResponse channel = instance.methods(token).conversationsHistory(req -> req
-                    .channel(channelName));
+                    .channel(channelId));
             if (channel.isOk()) {
                 messageList = channel.getMessages();
             } else { throw new BotCommandException(channel.getError()); }
         } catch (SlackApiException requestFailure) {
-            throw new BotCommandException("Slack API responded with unsuccessful status code. " + requestFailure);
+            throw new BotCommandException(SlackAPIExceptionMessage + requestFailure);
         } catch (IOException connectivityIssue) {
-            throw new BotCommandException("Connection issue. Please check your token. " + connectivityIssue);
+            throw new BotCommandException(connectivityIssueMessage + connectivityIssue);
         }
         return messageList;
     }
@@ -143,7 +164,7 @@ public class SlackMethods {
         return tableVariable;
     }
 
-    public static TableValue listChannels (Slack instance, String token) {
+    public TableValue listChannels () {
         Table outputTable = new Table();
         TableValue tableVariable = new TableValue();
         //set Schema for table
@@ -170,11 +191,30 @@ public class SlackMethods {
                 }
                 else { throw new BotCommandException(response.getError()); }
         } catch (SlackApiException requestFailure) {
-            throw new BotCommandException("Slack API responded with unsuccessful status code. " + requestFailure);
+            throw new BotCommandException(SlackAPIExceptionMessage + requestFailure);
         } catch (IOException connectivityIssue) {
-            throw new BotCommandException("Connection issue. Please check your token. " + connectivityIssue);
+            throw new BotCommandException(connectivityIssueMessage + connectivityIssue);
         }
         tableVariable.set(outputTable);
         return tableVariable;
+    }
+
+    public String inviteUsers (String channel, List<String> users) {
+        String output = null;
+        try {
+            ConversationsInviteResponse response = instance.methods(token).conversationsInvite(req -> req
+                    .channel(channel)
+                    .users(users));
+            if (response.isOk()) {
+                output = "Users have been invited.";
+            } else {
+                System.out.println(response.getError());
+            }
+        } catch (SlackApiException requestFailure) {
+            throw new BotCommandException(SlackAPIExceptionMessage + requestFailure);
+        } catch (IOException connectivityIssue) {
+            throw new BotCommandException(connectivityIssueMessage + connectivityIssue);
+        }
+        return output;
     }
 }

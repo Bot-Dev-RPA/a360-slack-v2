@@ -53,7 +53,10 @@ public class DeleteMessage {
 					@NotEmpty String timestamp
 	) {
 		SlackServer slackObject = (SlackServer) this.sessionMap.get(sessionName);
-		return new StringValue(SlackMethods.deleteMessage(slackObject.slack, slackObject.token, channel, timestamp));
+		SlackMethods slack = new SlackMethods()
+				.setInstance(slackObject.slack)
+				.setToken(slackObject.token);
+		return new StringValue(slack.deleteMessage(channel, timestamp));
 	}
 	public void setSessionMap(Map<String, Object> sessionMap) {
 		this.sessionMap = sessionMap;
